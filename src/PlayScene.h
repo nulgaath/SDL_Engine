@@ -36,6 +36,10 @@ private:
 	Button* m_pNextButton{};
 	Label* m_pInstructionsLabel{};
 
+	float m_angleDegrees = 0;
+	float m_speed = 0; //pixel per second
+	glm::vec2 m_startPosition = glm::vec2(0, 500);
+
 	// Input Control
 	int m_pCurrentInputType{};
 	void GetPlayerInput();

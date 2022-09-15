@@ -17,9 +17,29 @@ PlayScene::PlayScene()
 PlayScene::~PlayScene()
 = default;
 
+glm::vec2 AngleMagnitudeToVec2(float angle, float magnitude)
+{
+	//sin(angle) = y/mag
+	//cos(angle) = x/magnitude
+
+	//x = cos(angle = magnitude
+	//y = som(angle) = magnitude
+	
+	return glm::vec2(cos(-angle * Util::Deg2Rad) * magnitude,
+		sin(-angle * Util::Deg2Rad) * magnitude
+
+	);
+}
+
 void PlayScene::Draw()
 {
 	DrawDisplayList();
+
+	glm::vec2 velocity = AngleMagnitudeToVec2(m_angleDegrees, m_speed);
+	glm::vec2 endPosition = m_startPosition + velocity;
+
+	Util::DrawLine(m_startPosition, endPosition, glm::vec4(1.0, 0.3,0.3, 1.0));
+
 	SDL_SetRenderDrawColor(Renderer::Instance().GetRenderer(), 255, 255, 255, 255);
 }
 
@@ -273,6 +293,16 @@ void PlayScene::GUI_Function()
 	}
 
 	ImGui::Separator();
+
+	ImGui::SliderFloat("Angle", &m_angleDegrees, 0, 360);
+	ImGui::SliderFloat("Speed", &m_speed, 0, 100);
+	ImGui::SliderFloat("Start Position", &(m_startPosition.x), 0, 800);
+
+
+	glm::vec2 velocity = AngleMagnitudeToVec2(m_angleDegrees, m_speed);
+	ImGui::LabelText("Velocity Vector: ", "x:%f", "y:%f", velocity.x, velocity.y);
+
+
 
 	static float float3[3] = { 0.0f, 1.0f, 1.5f };
 	if(ImGui::SliderFloat3("My Slider", float3, 0.0f, 2.0f))
